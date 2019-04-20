@@ -6,10 +6,11 @@ from mpd import MPDClient
 from mpd.base import CommandError
 from collections import defaultdict
 from re import sub
+from os import environ
 
 class Spotify():
     def __init__(self):
-        self.username = 'pacycddnux2t0y3sxkb5ph776'
+        self.username = environ.get("SPOTIFY_USERNAME")
         self.client_credentials_manager = SpotifyClientCredentials()
         self.sp = spotipy.Spotify(
                 client_credentials_manager=self.client_credentials_manager
@@ -63,6 +64,7 @@ class Spotify():
             new_playlist = self.playlists[playlist]
 
             if set(new_playlist) != current_playlist_stored:
+                print("{0} has missing tracks, trying to add them".format(playlist))
                 try:
                     self.mpd_client.playlistclear(playlist)
                 except CommandError as e:
@@ -72,7 +74,6 @@ class Spotify():
                 for track_id in new_playlist:
                     try:
                         self.mpd_client.playlistadd(playlist, track_id)
-                        print("Adding {0} to {1}".format(track_id, playlist))
                     except CommandError as e:
                         print(e)
                         print("Could not add {0}".format(track_id))

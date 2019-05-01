@@ -1,6 +1,7 @@
 ## Usage
 
 ### Please note that this won't work without Spotify Premium because Spotify limits web API access to non-free accounts.
+### This also requires you to have set up [mopidy-spotify](https://github.com/mopidy/mopidy-spotify) in order to play spotify tracks.
 
 * Run `pip install --user .` in this repo.
 

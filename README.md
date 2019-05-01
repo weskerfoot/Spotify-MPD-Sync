@@ -2,6 +2,8 @@
 
 ### Please note that this won't work without Spotify Premium because Spotify limits web API access to non-free accounts.
 
+* Run `pip install --user .` in this repo.
+
 * Go to [https://developer.spotify.com/dashboard/applications](https://developer.spotify.com/dashboard/applications) and create an application. Call it whatever you want.
 
 * Create a `.env` or `.envrc` file with contents like this, put it wherever you
@@ -19,4 +21,4 @@ export SPOTIFY_USERNAME='YOUR_SPOTIFY_USERNAME'
 
 * You can find your spotify username [here](https://www.spotify.com/us/account/overview/)
 
-* Now you can run `spotify-mpd-sync` with your `.env` file sourced (e.g. `source .env`)
+* Now you can run `spotsync` with your `.env` file sourced (e.g. `source .env`)

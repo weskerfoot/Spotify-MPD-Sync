@@ -17,7 +17,7 @@ class Spotify():
                 )
 
         self.mpd_client = MPDClient()
-        self.mpd_client.connect("ismeta.local", 6600)
+        self.mpd_client.connect("127.0.0.1", 6600)
 
         self._playlists = defaultdict(lambda: [])
 

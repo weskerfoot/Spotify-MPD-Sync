@@ -17,9 +17,14 @@ setuptools.setup(
         "spotipy>=2.4.4",
         "python-mpd2>=1.0.0"
     ],
-    classifiers=[
+    classifiers= [
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+    entry_points = {
+        "console_scripts" : [
+            "spotsync = spotify_mpd_sync.msplaylist.spotify:run_sync"
+        ]
+    }
 )

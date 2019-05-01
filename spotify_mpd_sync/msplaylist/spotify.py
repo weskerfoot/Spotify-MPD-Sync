@@ -78,3 +78,8 @@ class Spotify():
                         print(e)
                         print("Could not add {0}".format(track_id))
                         continue
+
+
+def run_sync():
+    spotify = Spotify()
+    spotify.persist_playlists()

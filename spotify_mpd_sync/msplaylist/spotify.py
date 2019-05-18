@@ -84,7 +84,6 @@ class Spotify():
 
                 # Now it should be safe to add any new playlist items
                 for track_id in new_playlist:
-                    print(track_id)
                     try:
                         self.mpd_client.playlistadd(playlist, track_id)
                     except CommandError as e:

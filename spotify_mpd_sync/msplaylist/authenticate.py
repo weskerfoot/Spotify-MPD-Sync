@@ -13,7 +13,6 @@ event_queue = queue.Queue()
 def index():
     auth_code = request.query.code
     if auth_code:
-        print("putting auth code in queue")
         auth_token_queue.put(auth_code)
         return "It worked! You may close this tab now"
 
@@ -24,16 +23,14 @@ def wait_for_done(task):
     server.daemon = True
     server.start()
     while True:
-        print("waiting for done token")
         event = event_queue.get()
         if event == "done":
-            print("Server being killed")
             break
 
 def run_server():
-    threading.Thread(target= lambda: wait_for_done(lambda: run(host='localhost', port=8080))).start()
-    print("server started")
-
+    threading.Thread(target= lambda: wait_for_done(lambda: run(quiet=True,
+                                                               host='localhost',
+                                                               port=8080))).start()
 
 def prompt_for_user_token(username, scope=None, client_id = None,
         client_secret = None, redirect_uri = None, cache_path = None):
@@ -91,14 +88,11 @@ def prompt_for_user_token(username, scope=None, client_id = None,
         try:
             import webbrowser
             webbrowser.open(auth_url)
-            print("Opened %s in your browser" % auth_url)
         except:
             print("Please navigate here: %s" % auth_url)
 
         response = "localhost:8080?code=%s" % auth_token_queue.get()
-        print("Got auth token!")
         print(response)
-        print("putting done token")
         event_queue.put("done")
 
         code = sp_oauth.parse_response_code(response)

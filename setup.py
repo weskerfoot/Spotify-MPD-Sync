@@ -15,7 +15,8 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires = [
         "spotipy>=2.4.4",
-        "python-mpd2>=1.0.0"
+        "python-mpd2>=1.0.0",
+        "bottle>=0.12.16"
     ],
     classifiers= [
         "Programming Language :: Python :: 3",

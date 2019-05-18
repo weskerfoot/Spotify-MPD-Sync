@@ -5,7 +5,6 @@ import spotipy.oauth2 as oauth2
 import spotipy
 import queue
 from bottle import route, run, response, request
-from sys import exit
 
 auth_token_queue = queue.Queue()
 event_queue = queue.Queue()
@@ -30,7 +29,6 @@ def wait_for_done(task):
         if event == "done":
             print("Server being killed")
             break
-    exit(1)
 
 def run_server():
     threading.Thread(target= lambda: wait_for_done(lambda: run(host='localhost', port=8080))).start()

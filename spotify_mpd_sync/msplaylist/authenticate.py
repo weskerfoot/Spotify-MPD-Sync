@@ -1,27 +1,41 @@
 # shows a user's playlists (need to be authenticated via oauth)
 
-from __future__ import print_function
-import os
+import threading
 import spotipy.oauth2 as oauth2
 import spotipy
 import queue
-import threading
 from bottle import route, run, response, request
+from sys import exit
 
 auth_token_queue = queue.Queue()
+event_queue = queue.Queue()
 
 @route('/')
 def index():
     auth_code = request.query.code
     if auth_code:
+        print("putting auth code in queue")
         auth_token_queue.put(auth_code)
         return "It worked! You may close this tab now"
 
     return "Oops! Something went wrong. Please file a bug report"
 
+def wait_for_done(task):
+    server = threading.Thread(target=task)
+    server.daemon = True
+    server.start()
+    while True:
+        print("waiting for done token")
+        event = event_queue.get()
+        if event == "done":
+            print("Server being killed")
+            break
+    exit(1)
+
 def run_server():
-    task = threading.Thread(target=lambda : run(host='localhost', port=8080))
-    task.start()
+    threading.Thread(target= lambda: wait_for_done(lambda: run(host='localhost', port=8080))).start()
+    print("server started")
+
 
 def prompt_for_user_token(username, scope=None, client_id = None,
         client_secret = None, redirect_uri = None, cache_path = None):
@@ -74,6 +88,7 @@ def prompt_for_user_token(username, scope=None, client_id = None,
     token_info = sp_oauth.get_cached_token()
 
     if not token_info:
+        run_server()
         auth_url = sp_oauth.get_authorize_url()
         try:
             import webbrowser
@@ -83,7 +98,10 @@ def prompt_for_user_token(username, scope=None, client_id = None,
             print("Please navigate here: %s" % auth_url)
 
         response = "localhost:8080?code=%s" % auth_token_queue.get()
-        auth_token_queue.task_done()
+        print("Got auth token!")
+        print(response)
+        print("putting done token")
+        event_queue.put("done")
 
         code = sp_oauth.parse_response_code(response)
         token_info = sp_oauth.get_access_token(code)

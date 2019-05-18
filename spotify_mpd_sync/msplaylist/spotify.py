@@ -1,4 +1,6 @@
 #! /usr/bin/env python
+import gevent.monkey
+gevent.monkey.patch_all() 
 
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
@@ -10,11 +12,10 @@ from re import sub
 from os import environ
 import spotipy.util as util
 
-from spotify_mpd_sync.msplaylist.authenticate import run_server, prompt_for_user_token
+from spotify_mpd_sync.msplaylist.authenticate import prompt_for_user_token
 
 class Spotify():
     def __init__(self):
-        run_server()
         self.username = environ.get("SPOTIFY_USERNAME")
 
         scope = "playlist-read-private"
@@ -83,6 +84,7 @@ class Spotify():
 
                 # Now it should be safe to add any new playlist items
                 for track_id in new_playlist:
+                    print(track_id)
                     try:
                         self.mpd_client.playlistadd(playlist, track_id)
                     except CommandError as e:

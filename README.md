@@ -29,7 +29,7 @@ export SPOTIPY_REDIRECT_URI="http://localhost:8080"
 * If this is the first time you are running it, it will direct you to a page in
   your browser to grant permission for the app you just created to access your
   private spotify playlist. You only need to do this once, and then your
-  credentials will be cached in the directory you ran `spotsync` in.
+  credentials will be cached.
 
 * You will be prompted to grant permission to the app, once that's done, it
   will cache the credentials locally and you should be able to just run

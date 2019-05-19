@@ -6,6 +6,7 @@ import spotipy
 import queue
 import os
 
+from os.path import isdir, expanduser
 from urllib.parse import urlparse
 from bottle import route, run, response, request
 
@@ -35,8 +36,17 @@ def run_server(host, port):
                                                                host=host,
                                                                port=port))).start()
 
-def prompt_for_user_token(username, scope=None, client_id = None,
-        client_secret = None, redirect_uri = None, cache_path = None):
+def get_cache_path(username):
+    cache_directory = expanduser("~/.cache")
+    if isdir(cache_directory):
+        return expanduser("~/.cache/.spotipy_credentials_cache-%s" % username)
+    return ".spotipy_credentials_cache-%s" % username
+
+def prompt_for_user_token(username,
+                          scope=None,
+                          client_id = None,
+                          client_secret = None,
+                          redirect_uri = None):
     """
     prompts the user to login if necessary and returns
         the user token suitable for use with the spotipy.Spotify 
@@ -49,7 +59,6 @@ def prompt_for_user_token(username, scope=None, client_id = None,
          - client_id - the client id of your app
          - client_secret - the client secret of your app
          - redirect_uri - the redirect URI of your app
-         - cache_path - path to location to save tokens
     """
 
     if not client_id:
@@ -75,9 +84,8 @@ def prompt_for_user_token(username, scope=None, client_id = None,
         ''')
         raise spotipy.SpotifyException(550, -1, 'no credentials set')
 
-    cache_path = cache_path or ".cache-" + username
     sp_oauth = oauth2.SpotifyOAuth(client_id, client_secret, redirect_uri, 
-        scope=scope, cache_path=cache_path)
+        scope=scope, cache_path=get_cache_path(username))
 
     # try to get a valid token for this user, from the cache,
     # if not in the cache, the create a new (this will send

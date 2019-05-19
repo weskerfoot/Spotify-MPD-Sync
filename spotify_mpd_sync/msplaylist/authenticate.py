@@ -4,6 +4,7 @@ import threading
 import spotipy.oauth2 as oauth2
 import spotipy
 import queue
+import os
 from bottle import route, run, response, request
 
 auth_token_queue = queue.Queue()
@@ -50,13 +51,13 @@ def prompt_for_user_token(username, scope=None, client_id = None,
     """
 
     if not client_id:
-        client_id = os.getenv('SPOTIPY_CLIENT_ID')
+        client_id = os.getenv("SPOTIPY_CLIENT_ID")
 
     if not client_secret:
-        client_secret = os.getenv('SPOTIPY_CLIENT_SECRET')
+        client_secret = os.getenv("SPOTIPY_CLIENT_SECRET")
 
     if not redirect_uri:
-        redirect_uri = os.getenv('SPOTIPY_REDIRECT_URI')
+        redirect_uri = os.getenv("SPOTIPY_REDIRECT_URI", "http://localhost:8080")
 
     if not client_id:
         print('''
@@ -91,8 +92,7 @@ def prompt_for_user_token(username, scope=None, client_id = None,
         except:
             print("Please navigate here: %s" % auth_url)
 
-        response = "localhost:8080?code=%s" % auth_token_queue.get()
-        print(response)
+        response = "%s?code=%s" % (redirect_uri, auth_token_queue.get())
         event_queue.put("done")
 
         code = sp_oauth.parse_response_code(response)

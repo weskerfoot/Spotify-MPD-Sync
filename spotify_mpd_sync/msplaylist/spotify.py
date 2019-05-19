@@ -20,11 +20,7 @@ class Spotify():
 
         scope = "playlist-read-private"
 
-        token = prompt_for_user_token(self.username,
-                                      scope,
-                                      client_id=environ.get("SPOTIPY_CLIENT_ID"),
-                                      client_secret=environ.get("SPOTIPY_CLIENT_SECRET"),
-                                      redirect_uri=environ.get("SPOTIPY_REDIRECT_URI"))
+        token = prompt_for_user_token(self.username, scope)
         if token:
             self.sp = spotipy.Spotify(auth=token)
 

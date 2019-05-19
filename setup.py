@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="spotify-mpd-sync-weskerfoot",
-    version="0.0.1",
+    version="0.0.2",
     author="Wesley Kerfoot",
     author_email="wes@wesk.tech",
     description="Synchronize Spotify Playlist to MPD",
@@ -15,7 +15,9 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires = [
         "spotipy>=2.4.4",
-        "python-mpd2>=1.0.0"
+        "python-mpd2>=1.0.0",
+        "bottle>=0.12.16",
+        "gevent>=1.4.0"
     ],
     classifiers= [
         "Programming Language :: Python :: 3",

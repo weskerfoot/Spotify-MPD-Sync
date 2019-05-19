@@ -3,7 +3,7 @@
 ### Please note that this won't work without Spotify Premium because Spotify limits web API access to non-free accounts.
 ### This also requires you to have set up [mopidy-spotify](https://github.com/mopidy/mopidy-spotify) in order to play spotify tracks.
 
-* Run `pip3 install --user .` in this repo.
+* Run `pip3 install --user spotify-mpd-sync`.
 
 * Go to [https://developer.spotify.com/dashboard/applications](https://developer.spotify.com/dashboard/applications) and create an application. Call it whatever you want.
 

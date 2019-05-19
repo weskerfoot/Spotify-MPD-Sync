@@ -4,8 +4,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="spotify-mpd-sync-weskerfoot",
-    version="0.0.2",
+    name="spotify-mpd-sync",
+    version="1.0",
     author="Wesley Kerfoot",
     author_email="wes@wesk.tech",
     description="Synchronize Spotify Playlist to MPD",

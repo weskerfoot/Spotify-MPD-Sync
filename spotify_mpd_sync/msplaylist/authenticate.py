@@ -5,6 +5,8 @@ import spotipy.oauth2 as oauth2
 import spotipy
 import queue
 import os
+
+from urllib.parse import urlparse
 from bottle import route, run, response, request
 
 auth_token_queue = queue.Queue()
@@ -28,10 +30,10 @@ def wait_for_done(task):
         if event == "done":
             break
 
-def run_server():
+def run_server(host, port):
     threading.Thread(target= lambda: wait_for_done(lambda: run(quiet=True,
-                                                               host='localhost',
-                                                               port=8080))).start()
+                                                               host=host,
+                                                               port=port))).start()
 
 def prompt_for_user_token(username, scope=None, client_id = None,
         client_secret = None, redirect_uri = None, cache_path = None):
@@ -84,7 +86,11 @@ def prompt_for_user_token(username, scope=None, client_id = None,
     token_info = sp_oauth.get_cached_token()
 
     if not token_info:
-        run_server()
+        redirect_uri_parsed = urlparse(redirect_uri)
+
+        run_server(redirect_uri_parsed.hostname,
+                   redirect_uri_parsed.port)
+
         auth_url = sp_oauth.get_authorize_url()
         try:
             import webbrowser

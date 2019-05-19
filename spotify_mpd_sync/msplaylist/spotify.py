@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 import gevent.monkey
-gevent.monkey.patch_all() 
+gevent.monkey.patch_all()
 
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials

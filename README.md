@@ -10,7 +10,7 @@
 * Go to "Edit Settings" in your newly created app, then add
   `http://localhost:8080`
   as a redirect URI and hit "Save" (You may choose a different one by setting
-  `SPOTIPY_REDIRECT_URI` in your environment)
+  `SPOTIPY_REDIRECT_URI` in your environment if localhost:8080 is unavailable)
 
 * Find your spotify username [here](https://www.spotify.com/us/account/overview/)
 

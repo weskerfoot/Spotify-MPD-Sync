@@ -1,23 +1,32 @@
 #! /usr/bin/env python
+import gevent.monkey
+gevent.monkey.patch_all()
 
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
+from spotipy.util import prompt_for_user_token
 from mpd import MPDClient
 from mpd.base import CommandError
 from collections import defaultdict
 from re import sub
 from os import environ
+import spotipy.util as util
+import argparse
+
+from spotify_mpd_sync.msplaylist.authenticate import prompt_for_user_token
 
 class Spotify():
-    def __init__(self):
+    def __init__(self, host="localhost", port=6600):
         self.username = environ.get("SPOTIFY_USERNAME")
-        self.client_credentials_manager = SpotifyClientCredentials()
-        self.sp = spotipy.Spotify(
-                client_credentials_manager=self.client_credentials_manager
-                )
+
+        scope = "playlist-read-private"
+
+        token = prompt_for_user_token(self.username, scope)
+        if token:
+            self.sp = spotipy.Spotify(auth=token)
 
         self.mpd_client = MPDClient()
-        self.mpd_client.connect("127.0.0.1", 6600)
+        self.mpd_client.connect(host, port)
 
         self._playlists = defaultdict(lambda: [])
 
@@ -81,5 +90,21 @@ class Spotify():
 
 
 def run_sync():
-    spotify = Spotify()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-H",
+                        "--host",
+                        default="localhost",
+                        help="The MPD server you would like spotsync to use, defaults localhost")
+
+    parser.add_argument("-P",
+                        "--port",
+                        type=int,
+                        default=6600,
+                        help="The MPD port you would like spotsync to use, defaults to 6600")
+
+    args = parser.parse_args()
+
+    spotify = Spotify(host=args.host,
+                      port=args.port)
+
     spotify.persist_playlists()

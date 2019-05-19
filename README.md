@@ -14,7 +14,7 @@
 
 * Find your spotify username [here](https://www.spotify.com/us/account/overview/)
 
-* Now you can run `spotsync -H my_mpd_host -P 6600 where `my_mpd_host` is the host you
+* Now you can run `spotsync -H my_mpd_host -P 6600` where `my_mpd_host` is the host you
   are running MPD on (host defaults to `localhost` and port defaults to 6600 if you do not include it)
 
 * You will be prompted to grant permission to the app, once that's done, it

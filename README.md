@@ -14,6 +14,15 @@
 
 * Find your spotify username [here](https://www.spotify.com/us/account/overview/)
 
+* You will have to set up some environment variables in order to run the app.
+
+```
+export SPOTIFY_USERNAME="The username you got above"
+export SPOTIPY_CLIENT_ID="Your app's client ID"
+export SPOTIPY_CLIENT_SECRET="Your app's client secret"
+export SPOTIPY_REDIRECT_URI="http://localhost:8080"
+```
+
 * Now you can run `spotsync -H my_mpd_host -P 6600` where `my_mpd_host` is the host you
   are running MPD on (host defaults to `localhost` and port defaults to `6600` if you do not include it)
 

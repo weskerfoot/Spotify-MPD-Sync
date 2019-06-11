@@ -48,11 +48,14 @@ class Spotify():
                 for track in self.sp.user_playlist(self.username,
                                                    playlist["id"],
                                                    fields="tracks,next")["tracks"]["items"]:
-
-                    self._playlists[self.sanitize_playlist(playlist["name"])].append(
-                            self.fmt_track(track["track"]["id"])
-                        )
-
+                    try:
+                        self._playlists[self.sanitize_playlist(playlist["name"])].append(
+                                self.fmt_track(track["track"]["id"])
+                            )
+                    except BaseException:
+                        print("Error parsing track!")
+                        continue
+                        
             if playlists["next"]:
                 playlists = self.sp.next(playlists)
             else:

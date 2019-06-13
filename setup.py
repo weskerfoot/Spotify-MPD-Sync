@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="spotify-mpd-sync",
-    version="1.0",
+    version="1.0.1",
     author="Wesley Kerfoot",
     author_email="wes@wesk.tech",
     description="Synchronize Spotify Playlist to MPD",

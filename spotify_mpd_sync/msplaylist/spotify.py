@@ -2,18 +2,17 @@
 import gevent.monkey
 gevent.monkey.patch_all()
 
-import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
-from spotipy.util import prompt_for_user_token
+from collections import defaultdict
 from mpd import MPDClient
 from mpd.base import CommandError
-from collections import defaultdict
-from re import sub
 from os import environ
-import spotipy.util as util
-import argparse
-
+from re import sub
 from spotify_mpd_sync.msplaylist.authenticate import prompt_for_user_token
+from spotipy.oauth2 import SpotifyClientCredentials
+from sys import stderr
+import argparse
+import spotipy
+import spotipy.util as util
 
 class Spotify():
     def __init__(self, host="localhost", port=6600):
@@ -48,10 +47,13 @@ class Spotify():
                 for track in self.sp.user_playlist(self.username,
                                                    playlist["id"],
                                                    fields="tracks,next")["tracks"]["items"]:
-
-                    self._playlists[self.sanitize_playlist(playlist["name"])].append(
-                            self.fmt_track(track["track"]["id"])
-                        )
+                    try:
+                        self._playlists[self.sanitize_playlist(playlist["name"])].append(
+                                self.fmt_track(track["track"]["id"])
+                            )
+                    except BaseException:
+                        stderr.write("Error parsing track {0}".format(track["track"]["id"]))
+                        continue
 
             if playlists["next"]:
                 playlists = self.sp.next(playlists)

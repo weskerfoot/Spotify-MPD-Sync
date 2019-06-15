@@ -52,7 +52,7 @@ class Spotify():
                                 self.fmt_track(track["track"]["id"])
                             )
                     except BaseException:
-                        stderr.write("Error parsing track {0}".format(track["track"]["id"]))
+                        stderr.write("Error parsing track {0}".format(repr(track)))
                         continue
 
             if playlists["next"]:
